@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings1</string>
+
+
+
+
+    <string name="nav_all_task">All task</string>
+    <string name="nav_upgrade">Upgrade</string>
+    <string name="nav_guide">Guide</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_upload">Upload</string>
+    <string name="nav_download">Download</string>
+    <string name="nav_set_lock">Set lock</string>
+    <string name="nav_trash">Trash</string>
+
+
+</resources>
