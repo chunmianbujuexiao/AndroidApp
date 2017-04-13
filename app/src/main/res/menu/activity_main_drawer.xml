@@ -3,35 +3,35 @@
 
         <item
             android:id="@+id/nav_all_task"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/alltask"
             android:title="@string/nav_all_task"/>
         <item
             android:id="@+id/nav_upgrade"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/upgrade"
             android:title="@string/nav_upgrade"/>
         <item
             android:id="@+id/nav_guide"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/guide"
             android:title="@string/nav_guide"/>
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/engine"
             android:title="@string/nav_settings"/>
         <item
             android:id="@+id/nav_upload"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/cloud_up"
             android:title="@string/nav_upload"/>
         <item
             android:id="@+id/nav_download"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/cloud_down"
             android:title="@string/nav_download"/>
         <item
             android:id="@+id/nav_set_lock"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/locked"
             android:title="@string/nav_set_lock"/>
         <item
             android:id="@+id/nav_trash"
-            android:icon="@drawable/ic_menu_help"
+            android:icon="@drawable/trash"
             android:title="@string/nav_trash"/>
 
 </menu>

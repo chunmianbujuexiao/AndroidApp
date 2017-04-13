@@ -7,8 +7,6 @@
     <string name="action_settings">Settings1</string>
 
 
-
-
     <string name="nav_all_task">All task</string>
     <string name="nav_upgrade">Upgrade</string>
     <string name="nav_guide">Guide</string>
@@ -18,5 +16,10 @@
     <string name="nav_set_lock">Set lock</string>
     <string name="nav_trash">Trash</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
 
+    <string name="title_activity_activity_upgrade">ActivityUpgrade</string>
+
+    <string name="text_textview_upgrade_display">这是我们的高级账户，数据保存，去除广告</string>
+    <string name="text_textview_guide_display">这是用户指导界面</string>
 </resources>
