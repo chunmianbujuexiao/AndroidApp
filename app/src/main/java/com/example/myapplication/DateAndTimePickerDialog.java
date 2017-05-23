@@ -1,11 +1,7 @@
 package com.example.myapplication;
 
-import java.lang.reflect.Field;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -16,6 +12,8 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TimePicker;
+
+import java.lang.reflect.Field;
 
 public class DateAndTimePickerDialog extends AlertDialog implements OnClickListener, OnDateChangedListener {
 
@@ -43,7 +41,7 @@ public class DateAndTimePickerDialog extends AlertDialog implements OnClickListe
     public interface OnDateSetListener {
 
         void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth,
-                       TimePicker TimePicker, int hourOfDay,int minute);
+                       TimePicker TimePicker, int hourOfDay, int minute);
     }
 
     public DateAndTimePickerDialog(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {

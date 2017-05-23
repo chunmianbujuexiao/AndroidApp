@@ -24,6 +24,16 @@ public class Task {
         this.edittime = edittime;
     }
 
+    public Task(String title,String content,String clocktime,String starttime,String endtime,String edittime) {
+
+        this.title = title;
+        this.content = content;
+        this.clocktime = clocktime;
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.edittime = edittime;
+    }
+
     public Task(int id,String title,String content,String clocktime,String starttime,String endtime) {
 
         this._id = id;

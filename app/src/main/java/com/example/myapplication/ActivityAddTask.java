@@ -1,5 +1,8 @@
 package com.example.myapplication;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,12 +21,13 @@ import com.example.myapplication.database.DatabaseTaskOpImpl;
 import com.example.myapplication.database.Task;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class ActivityAddTask extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editTextTitle = null;
     private EditText editTextContent = null;
-    private DatabaseHelper databaseHelper = null;
+    private DatabaseHelper databaseHelper = new DatabaseHelper(this);
     private ImageButton imageButtonClock = null;
     private ImageButton iamgeButtonStartTime = null;
     private ImageButton imageButtonEndTime = null;
@@ -34,6 +38,7 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
     private String starttime = null;
     private String endtime = null;
     private int id = -1;
+    private Date date = new Date();
     private DatabaseTaskOpImpl dtoi = new DatabaseTaskOpImpl();
 
 
@@ -59,7 +64,7 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
         iamgeButtonStartTime.setOnClickListener(this);
         imageButtonEndTime.setOnClickListener(this);
 
-        databaseHelper = new DatabaseHelper(this);
+//        databaseHelper = new DatabaseHelper(this);
 
         //获取点击的listview的id，加载相应内容
         Bundle bundle = this.getIntent().getExtras();
@@ -95,13 +100,42 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
 
                 if(id == -1){
                     //添加任务信息
-                    Task t = new Task(title,content,clocktime,starttime,endtime);
-                    boolean b = dtoi.addTask(databaseHelper,t);
+                    Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    String textString = String.format("%d-%d-%d %d：%d  ", year,month , day, hour, minute);
+                    Task t = new Task(title,content,clocktime,starttime,endtime,textString);
+                    dtoi.addTask(databaseHelper,t);
+
+                    Intent intent = new Intent(ActivityAddTask.this, BroadcastReceiverAlarm.class);
+                    PendingIntent sender = PendingIntent.getBroadcast(ActivityAddTask.this, 0, intent, 0);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 
                 }else{
                     //更新任务信息
-                    Task t = new Task(id,title,content,clocktime,starttime,endtime);
+                    Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    String textString = String.format("%d-%d-%d %d：%d", year,month , day, hour, minute);
+                    Task t = new Task(id,title,content,clocktime,starttime,endtime,textString);
                     boolean b = dtoi.updateTask(databaseHelper,t);
+
+//                    //set clock
+//                    Intent intent = new Intent(ActivityAddTask.this, AlarmReceiver.class);
+//                    PendingIntent sender = PendingIntent.getBroadcast(ActivityAddTask.this, 0, intent, 0);
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(date);
+//                    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+//                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
                 }
                 //还原默认内容
                 setDefaultDisplay();
@@ -145,6 +179,13 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
                                 monthOfYear , dayOfMonth, hourOfDay, minute);
                         textViewClockDisplay.setText("闹钟时间: "+textString);
                         clocktime = textString;
+                        Date date = new Date();
+                        date.setYear(year);
+                        date.setMonth(monthOfYear);
+                        date.setDate(dayOfMonth);
+                        date.setHours(hourOfDay);
+                        date.setMinutes(minute);
+
                     }
 
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), true).show();
@@ -175,6 +216,8 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
                                 monthOfYear , dayOfMonth, hourOfDay, minute);
                         textViewEndTime.setText("结束时间："+textString);
                         endtime = textString;
+
+
                     }
 
                 }, c2.get(Calendar.YEAR), c2.get(Calendar.MONTH), c2.get(Calendar.DATE), true).show();

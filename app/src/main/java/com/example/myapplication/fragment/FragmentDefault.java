@@ -1,11 +1,14 @@
 package com.example.myapplication.fragment;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +19,26 @@ import android.widget.SimpleAdapter;
 import com.example.myapplication.ActivityAddTask;
 import com.example.myapplication.R;
 import com.example.myapplication.database.DatabaseHelper;
+import com.example.myapplication.database.DatabaseTaskOpImpl;
+import com.example.myapplication.database.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FragmentDefault extends Fragment implements AdapterView.OnItemClickListener{
+public class FragmentDefault extends Fragment implements AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener{
 
     private ListView listView;
     private ArrayList<HashMap<String, Object>> listItem;
     DatabaseHelper databaseHelper = null;
+    private DatabaseTaskOpImpl dtoi = new DatabaseTaskOpImpl();
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         AppCompatActivity a = (AppCompatActivity) getActivity();
         databaseHelper = new DatabaseHelper(a);
         View view = inflater.inflate(R.layout.fragment_default, container, false);
         listView = (ListView) view.findViewById(R.id.id_listview_fragment_default_task);
+        listView.setOnItemLongClickListener(this);
         listView.setOnItemClickListener(this);
         listItem = new ArrayList<HashMap<String, Object>>();/*在数组中存放数据*/
 
@@ -134,5 +142,40 @@ public class FragmentDefault extends Fragment implements AdapterView.OnItemClick
         b.putInt("id",idItem);
         i.putExtras(b);
         startActivity(i);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.e("Time","TExt");
+        final int p = position;
+        AppCompatActivity a = (AppCompatActivity) getActivity();
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(a);
+        normalDialog.setIcon(R.drawable.back);
+        normalDialog.setTitle("删除Dialog");
+        normalDialog.setMessage("选择是否删除此Task");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                        HashMap<String, Object> hashMap = listItem.get(p);
+                        String str = (String) hashMap.get("id");
+                        int idItem = Integer.parseInt(str);
+                        Task t = new Task(idItem);
+                        dtoi.deleteTask(databaseHelper,t);
+                        onStart();
+                    }
+                });
+        normalDialog.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-docc
+                    }
+                });
+        // 显示
+        normalDialog.show();
+        return true;
     }
 }

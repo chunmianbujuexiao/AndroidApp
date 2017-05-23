@@ -70,7 +70,7 @@
 
             <ImageButton
                 android:id="@+id/id_imagebutton_add_task_set_clock_time"
-                android:src="@drawable/ic_menu_home"
+                android:src="@drawable/ic_add_task_alarm2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <LinearLayout
@@ -108,7 +108,7 @@
 
             <ImageButton
                 android:id="@+id/id_imagebutton_add_task_set_start_time"
-                android:src="@drawable/ic_menu_home"
+                android:src="@drawable/ic_add_task_alarm2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <LinearLayout
@@ -146,7 +146,7 @@
 
             <ImageButton
                 android:id="@+id/id_imagebutton_add_task_set_end_time"
-                android:src="@drawable/ic_menu_home"
+                android:src="@drawable/ic_add_task_alarm2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <LinearLayout

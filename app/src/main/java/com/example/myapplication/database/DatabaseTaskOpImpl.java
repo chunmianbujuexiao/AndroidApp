@@ -7,11 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Administrator on 2017/4/12.
  */
-public class DatabaseTaskOpImpl implements IAddTask,IUpdateTask,IQueryById {
+public class DatabaseTaskOpImpl implements IAddTask,IUpdateTask,IQueryById,IDeleteTask,IDatabaseOp {
 
-    private ContentValues cv = null;
-    private SQLiteDatabase dbWrite = null;
-    private SQLiteDatabase dbRead = null;
 
     public DatabaseTaskOpImpl(){
 
@@ -19,15 +16,26 @@ public class DatabaseTaskOpImpl implements IAddTask,IUpdateTask,IQueryById {
 
     public boolean addTask(DatabaseHelper d, Task t) {
         //添加Task
-        dbWrite = d.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase dbWrite = d.getWritableDatabase();
         cv.put("title", t.getTitle());
         cv.put("content", t.getContent());
         cv.put("clocktime",t.getClocktime());
         cv.put("starttime",t.getStarttime());
         cv.put("endtime",t.getEndtime());
+        cv.put("edittime",t.getEdittime());
         dbWrite.insert("task", null, cv);
         dbWrite.close();
         cv = null;
+        return true;
+    }
+
+    @Override
+    public boolean deleteTask(DatabaseHelper d, Task t) {
+        SQLiteDatabase dbWrite = d.getWritableDatabase();
+        String whereClause = "_id=?";
+        String[] whereArgs = {String.valueOf(t.get_id())};
+        dbWrite.delete("task",whereClause,whereArgs);
         return true;
     }
 
@@ -41,6 +49,7 @@ public class DatabaseTaskOpImpl implements IAddTask,IUpdateTask,IQueryById {
         cv.put("clocktime",t.getClocktime());
         cv.put("starttime",t.getStarttime());
         cv.put("endtime",t.getEndtime());
+        cv.put("edittime",t.getEdittime());
         String whereClause = "_id=?";
         String[] whereArgs = {String.valueOf(t.get_id())};
         dbWrite.update("task",cv,whereClause,whereArgs);
