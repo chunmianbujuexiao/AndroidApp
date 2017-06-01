@@ -5,8 +5,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,11 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
     private String clocktime = null;
     private String starttime = null;
     private String endtime = null;
+    private String oldTitle = "";
+    private String oldContent = "";
+    private String oldClocktime = "";
+    private String oldStarttime = "";
+    private String oldEndtime = "";
     private int id = -1;
     private Date date = new Date();
     private DatabaseTaskOpImpl dtoi = new DatabaseTaskOpImpl();
@@ -75,9 +82,29 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
             SQLiteDatabase dbRead = databaseHelper.getReadableDatabase();
             editTextTitle.setText(tnew.getTitle());
             editTextContent.setText(tnew.getContent());
-            textViewClockDisplay.setText("闹钟时间："+tnew.getClocktime());
-            textViewStartTime.setText("开始时间："+tnew.getStarttime());
-            textViewEndTime.setText("结束时间："+tnew.getEndtime());
+            clocktime = tnew.getClocktime();
+            starttime = tnew.getStarttime();
+            endtime = tnew.getEndtime();
+            if(clocktime != null){
+                textViewClockDisplay.setText("闹钟时间："+clocktime);
+            }else{
+                textViewClockDisplay.setText("闹钟时间：");
+            }
+            if(starttime != null){
+                textViewStartTime.setText("开始时间："+starttime);
+            }else{
+                textViewStartTime.setText("开始时间：");
+            }
+            if(endtime != null){
+                textViewEndTime.setText("结束时间："+ endtime);
+            }else{
+                textViewEndTime.setText("结束时间：");
+            }
+            oldClocktime = tnew.getClocktime();
+            oldStarttime = tnew.getStarttime();
+            oldEndtime = tnew.getEndtime();
+            oldTitle = tnew.getTitle();
+            oldContent = tnew.getContent();
         }
 
     }
@@ -109,13 +136,19 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
                     String textString = String.format("%d-%d-%d %d：%d  ", year,month , day, hour, minute);
                     Task t = new Task(title,content,clocktime,starttime,endtime,textString);
                     dtoi.addTask(databaseHelper,t);
+                    if(clocktime != null){
+                        Intent intent = new Intent(ActivityAddTask.this, BroadcastReceiverAlarm.class);
+                        PendingIntent sender = PendingIntent.getBroadcast(ActivityAddTask.this, 0, intent, 0);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        Log.e("Year",String.valueOf(calendar.get(Calendar.YEAR)));
+                        Log.e("MONTH",String.valueOf(calendar.get(Calendar.MONTH)));
+                        Log.e("DAY",String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        Log.e("MIN",String.valueOf(calendar.get(Calendar.MINUTE)));
 
-                    Intent intent = new Intent(ActivityAddTask.this, BroadcastReceiverAlarm.class);
-                    PendingIntent sender = PendingIntent.getBroadcast(ActivityAddTask.this, 0, intent, 0);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                    }
 
                 }else{
                     //更新任务信息
@@ -129,13 +162,15 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
                     Task t = new Task(id,title,content,clocktime,starttime,endtime,textString);
                     boolean b = dtoi.updateTask(databaseHelper,t);
 
-//                    //set clock
-//                    Intent intent = new Intent(ActivityAddTask.this, AlarmReceiver.class);
-//                    PendingIntent sender = PendingIntent.getBroadcast(ActivityAddTask.this, 0, intent, 0);
-//                    Calendar calendar = Calendar.getInstance();
-//                    calendar.setTime(date);
-//                    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                    //重新设置闹钟
+                    if(clocktime != null){
+                        Intent intent = new Intent(ActivityAddTask.this, BroadcastReceiverAlarm.class);
+                        PendingIntent sender = PendingIntent.getBroadcast(ActivityAddTask.this, 0, intent, 0);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                    }
                 }
                 //还原默认内容
                 setDefaultDisplay();
@@ -161,9 +196,9 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
         textViewClockDisplay.setText("设置闹钟");
         textViewStartTime.setText("设置开始时间");
         textViewEndTime.setText("设置结束时间");
-        clocktime = "";
-        starttime = "";
-        endtime = "";
+        clocktime = null;
+        starttime = null;
+        endtime = null;
     }
 
     public void setTime(int id){
@@ -179,12 +214,12 @@ public class ActivityAddTask extends AppCompatActivity implements View.OnClickLi
                                 monthOfYear , dayOfMonth, hourOfDay, minute);
                         textViewClockDisplay.setText("闹钟时间: "+textString);
                         clocktime = textString;
-                        Date date = new Date();
-                        date.setYear(year);
+                        date.setYear(year-1900);
                         date.setMonth(monthOfYear);
                         date.setDate(dayOfMonth);
                         date.setHours(hourOfDay);
                         date.setMinutes(minute);
+                        date.setSeconds(0);
 
                     }
 

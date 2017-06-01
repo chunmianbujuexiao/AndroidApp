@@ -3,21 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:background="#08142d"
     tools:context="com.example.myapplication.ActivityLock">
+    <LinearLayout
+        android:background="#08142d"
+        android:paddingBottom="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/id_button_activity_lock"
-        android:text="Test Lock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src = "@drawable/ic_menu_home"/>
+        <TextView
+            android:gravity="bottom"
+            android:textSize="25dp"
+            android:layout_width="wrap_content"
+            android:text="   私人小秘                     "
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/id_imagebutton_quit_lock"
+            android:paddingRight="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_item_cancel"/>
+    </LinearLayout>
 
     <ListView
+        android:background="#0a294b"
         android:id="@+id/id_listview_activitylock_task"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </ListView>

@@ -2,13 +2,17 @@ package com.example.myapplication;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 import com.example.myapplication.activity_common.ActivityGuide;
 import com.example.myapplication.activity_common.ActivitySettings;
 import com.example.myapplication.activity_common.ActivityUpgrade;
+import com.example.myapplication.database.DatabaseHelper;
 import com.example.myapplication.fragment.FragmentDefault;
 import com.example.myapplication.fragment.FragmentTrash;
 
@@ -28,6 +33,9 @@ public class MainActivity extends AppCompatActivity
     private FragmentDefault fragmentDefault = null;
     private FragmentTrash fragmentTrash = null;
     private DrawerLayout drawer = null;
+    private DatabaseHelper databaseHelper = null;
+    private int order = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +43,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_main);
         setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(this);
+
+        databaseHelper = new DatabaseHelper(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.id_fab_main);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -120,10 +130,21 @@ public class MainActivity extends AppCompatActivity
             case R.id.toolbar_edit:
                 break;
             case R.id.toolbar_sort_order:
-                Toast.makeText(MainActivity.this, "Sync", Toast.LENGTH_SHORT).show();
+                final String[] items = { "编辑时间正序","编辑时间倒序","创立时间正序","创立时间倒序" };
+                AlertDialog.Builder listDialog =
+                        new AlertDialog.Builder(MainActivity.this);
+                listDialog.setTitle("选择排列顺序");
+                listDialog.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        order = which;
+                        fragmentDefault.onStart();
+                    }
+                });
+                listDialog.show();
                 break;
             case R.id.toolbar_setting:
-                Toast.makeText(MainActivity.this, "Sync", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Test", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
@@ -175,6 +196,10 @@ public class MainActivity extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
                 break;
             }
+    }
+
+    public int getOrder(){
+        return order;
     }
 
 }

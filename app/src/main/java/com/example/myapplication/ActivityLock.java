@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.app.KeyguardManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,7 +19,7 @@ import com.example.myapplication.database.DatabaseHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ActivityLock extends AppCompatActivity {
+public class ActivityLock extends Activity {
 
     DatabaseHelper databaseHelper = null;
     @Override
@@ -31,7 +32,7 @@ public class ActivityLock extends AppCompatActivity {
 //                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 //                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 //                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-//        setContentView(R.layout.activity_activity_lock);
+        setContentView(R.layout.activity_activity_lock);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -81,15 +82,15 @@ public class ActivityLock extends AppCompatActivity {
         listView.setAdapter(mSimpleAdapter);
 
 
-        Button b = (Button)findViewById(R.id.id_button_activity_lock);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-                KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("");
-                keyguardLock.disableKeyguard();
-                Toast.makeText(ActivityLock.this,"lock success",Toast.LENGTH_SHORT);
-            }
-        });
+//        Button b = (Button)findViewById(R.id.id_button_activity_lock);
+//        b.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+//                KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("");
+//                keyguardLock.disableKeyguard();
+//                Toast.makeText(ActivityLock.this,"lock success",Toast.LENGTH_SHORT);
+//            }
+//        });
     }
 }

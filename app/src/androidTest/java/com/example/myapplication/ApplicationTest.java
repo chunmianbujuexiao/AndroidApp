@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.app.Application;
+import android.app.Instrumentation;
+import android.support.test.uiautomator.UiDevice;
 import android.test.ApplicationTestCase;
 
 /**
@@ -9,5 +11,9 @@ import android.test.ApplicationTestCase;
 public class ApplicationTest extends ApplicationTestCase<Application> {
     public ApplicationTest() {
         super(Application.class);
+    }
+
+    public void testA(){
+        assertEquals(1,1);
     }
 }
